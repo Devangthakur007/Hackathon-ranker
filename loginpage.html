@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hackathon Portal — Login</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        }
+
+        body {
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: radial-gradient(ellipse at 70% 20%, rgba(215, 255, 94, 0.08), transparent 45%), #0a0a0a;
+            color: #ffffff;
+            padding: 20px;
+        }
+
+        .login-box {
+            width: 100%;
+            max-width: 420px;
+            padding: 40px 36px;
+            background: #111111;
+            border: 1px solid #222222;
+            border-radius: 18px;
+            box-shadow: 0 25px 60px rgba(0, 0, 0, 0.7);
+            position: relative;
+        }
+
+        .brand-header {
+            text-align: center;
+            margin-bottom: 28px;
+        }
+
+        .brand-badge {
+            display: inline-block;
+            padding: 5px 12px;
+            border: 1px solid #2a2a2a;
+            border-radius: 20px;
+            color: #d7ff5e;
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            margin-bottom: 12px;
+            background: #080808;
+        }
+
+        .brand-header h2 {
+            font-size: 26px;
+            font-weight: 800;
+            letter-spacing: -0.03em;
+            color: #ffffff;
+        }
+
+        .brand-header h2 span {
+            color: #d7ff5e;
+        }
+
+        .brand-header p {
+            color: #888888;
+            font-size: 13px;
+            margin-top: 6px;
+        }
+
+        .input-box {
+            margin-bottom: 20px;
+        }
+
+        .input-box label {
+            display: block;
+            margin-bottom: 8px;
+            color: #cccccc;
+            font-size: 12px;
+            font-weight: 600;
+            letter-spacing: 0.04em;
+            text-transform: uppercase;
+        }
+
+        .input-box input {
+            width: 100%;
+            padding: 13px 15px;
+            background: #060606;
+            border: 1px solid #262626;
+            border-radius: 8px;
+            outline: none;
+            font-size: 14px;
+            color: #ffffff;
+            transition: all 0.2s;
+        }
+
+        .input-box input:focus {
+            border-color: #d7ff5e;
+            box-shadow: 0 0 0 3px rgba(215, 255, 94, 0.1);
+        }
+
+        .remember {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 13px;
+            color: #888888;
+            margin-bottom: 24px;
+        }
+
+        .remember label {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+        }
+
+        .remember input {
+            accent-color: #d7ff5e;
+        }
+
+        .remember a {
+            color: #d7ff5e;
+            text-decoration: none;
+            font-size: 12px;
+        }
+
+        .remember a:hover {
+            text-decoration: underline;
+        }
+
+        .login-btn {
+            width: 100%;
+            padding: 14px;
+            border: none;
+            border-radius: 8px;
+            background: #d7ff5e;
+            color: #000000;
+            font-size: 14px;
+            cursor: pointer;
+            font-weight: 800;
+            letter-spacing: 0.05em;
+            transition: all 0.2s;
+            margin-bottom: 12px;
+        }
+
+        .login-btn:hover {
+            background: #c3f03b;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(215, 255, 94, 0.25);
+        }
+
+        .demo-btn {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #333333;
+            border-radius: 8px;
+            background: #181818;
+            color: #e5e5e5;
+            font-size: 13px;
+            cursor: pointer;
+            font-weight: 700;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .demo-btn:hover {
+            background: #222222;
+            border-color: #555555;
+            color: #ffffff;
+        }
+
+        .register {
+            text-align: center;
+            margin-top: 24px;
+            font-size: 13px;
+            color: #888888;
+        }
+
+        .register a {
+            color: #d7ff5e;
+            text-decoration: none;
+            font-weight: 700;
+            cursor: pointer;
+        }
+
+        .register a:hover {
+            text-decoration: underline;
+        }
+
+        /* ================= REGISTRATION MODAL ================= */
+        #registerModal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(6px);
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            padding: 20px;
+        }
+
+        #registerModal.show {
+            display: flex;
+        }
+
+        .close-btn {
+            background: transparent;
+            color: #888888;
+            border: 1px solid #282828;
+            margin-top: 8px;
+        }
+
+        .close-btn:hover {
+            background: #181818;
+            color: #ffffff;
+        }
+
+        .success-message {
+            color: #d7ff5e;
+            font-size: 13px;
+            padding: 12px;
+            background: rgba(215, 255, 94, 0.08);
+            border: 1px solid rgba(215, 255, 94, 0.25);
+            border-radius: 6px;
+            margin-bottom: 18px;
+            display: none;
+        }
+
+        .error-message {
+            color: #ff6b6b;
+            font-size: 13px;
+            padding: 12px;
+            background: rgba(255, 107, 107, 0.08);
+            border: 1px solid rgba(255, 107, 107, 0.25);
+            border-radius: 6px;
+            margin-bottom: 18px;
+            display: none;
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- ============= LOGIN FORM ============= -->
+    <div class="login-box">
+
+        <div class="brand-header">
+            <div class="brand-badge">DROPPROJECT // HACKATHON 2026</div>
+            <h2>Project <span>Judge</span> Hub</h2>
+            <p>Submit projects & get instant AI hackathon evaluations</p>
+        </div>
+
+        <div class="error-message" id="loginError"></div>
+
+        <form id="loginForm">
+            <div class="input-box">
+                <label>Email Address</label>
+                <input type="email" id="loginEmail" placeholder="you@example.com" required>
+            </div>
+
+            <div class="input-box">
+                <label>Password</label>
+                <input type="password" id="loginPassword" placeholder="Enter your password" required>
+            </div>
+
+            <div class="remember">
+                <label>
+                    <input type="checkbox" id="rememberMe"> Remember me
+                </label>
+                <a href="#" onclick="alert('For demo accounts, use password: password123 or click Quick Demo Login below.')">Need help?</a>
+            </div>
+
+            <button type="submit" class="login-btn">LOG IN TO PORTAL →</button>
+            <button type="button" class="demo-btn" id="demoLoginBtn">⚡ Quick Demo Login (Skip Typing)</button>
+
+            <div class="register">
+                Don't have an account?
+                <a href="#" id="registerBtn">Register Now</a>
+            </div>
+        </form>
+
+    </div>
+
+    <!-- ============= REGISTRATION MODAL ============= -->
+    <div id="registerModal">
+        <div class="login-box">
+            <div class="brand-header">
+                <div class="brand-badge">NEW PARTICIPANT</div>
+                <h2>Create <span>Account</span></h2>
+                <p>Register as a Hacker or Hackathon Judge</p>
+            </div>
+
+            <div class="success-message" id="registerSuccess">✓ Registration successful! Redirecting to login...</div>
+            <div class="error-message" id="registerError"></div>
+
+            <form id="registerForm">
+                <div class="input-box">
+                    <label>Full Name / Team Name</label>
+                    <input type="text" id="registerName" placeholder="e.g. Alex Rivera" required>
+                </div>
+
+                <div class="input-box">
+                    <label>Email Address</label>
+                    <input type="email" id="registerEmail" placeholder="you@example.com" required>
+                </div>
+
+                <div class="input-box">
+                    <label>Password (min 6 chars)</label>
+                    <input type="password" id="registerPassword" placeholder="Create password" required>
+                </div>
+
+                <div class="input-box">
+                    <label>Confirm Password</label>
+                    <input type="password" id="registerConfirmPassword" placeholder="Confirm password" required>
+                </div>
+
+                <button type="submit" class="login-btn">CREATE ACCOUNT</button>
+                <button type="button" class="login-btn close-btn" id="closeBtn">Cancel & Back to Login</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // Seed default demo user if not present
+        if (!localStorage.getItem('users_demo@hackathon.com')) {
+            localStorage.setItem('users_demo@hackathon.com', JSON.stringify({
+                name: 'Alex Rivera (Demo)',
+                email: 'demo@hackathon.com',
+                password: 'password123',
+                registeredDate: new Date().toLocaleString()
+            }));
+        }
+
+        // ===== LOGIN FORM SUBMIT =====
+        const loginForm = document.getElementById('loginForm');
+        const loginError = document.getElementById('loginError');
+
+        loginForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const email = document.getElementById('loginEmail').value.trim();
+            const password = document.getElementById('loginPassword').value;
+
+            loginError.style.display = 'none';
+            
+            // CHECK IF USER EXISTS IN LOCALSTORAGE
+            const storedUser = localStorage.getItem('users_' + email);
+            
+            if (storedUser) {
+                const userData = JSON.parse(storedUser);
+                
+                if (userData.password === password) {
+                    sessionStorage.setItem('userEmail', email);
+                    sessionStorage.setItem('userName', userData.name);
+                    window.location.href = 'projectsub.html';
+                } else {
+                    loginError.textContent = '❌ Incorrect password!';
+                    loginError.style.display = 'block';
+                }
+            } else {
+                loginError.textContent = '❌ User not found! Please register first or use Quick Demo.';
+                loginError.style.display = 'block';
+            }
+        });
+
+        // ===== QUICK DEMO LOGIN =====
+        document.getElementById('demoLoginBtn').addEventListener('click', function() {
+            sessionStorage.setItem('userEmail', 'demo@hackathon.com');
+            sessionStorage.setItem('userName', 'Alex Rivera (Hacker)');
+            window.location.href = 'projectsub.html';
+        });
+
+        // ===== SHOW REGISTRATION MODAL =====
+        document.getElementById('registerBtn').addEventListener('click', function(e) {
+            e.preventDefault();
+            document.getElementById('registerModal').classList.add('show');
+        });
+
+        // ===== CLOSE REGISTRATION MODAL =====
+        document.getElementById('closeBtn').addEventListener('click', function(e) {
+            e.preventDefault();
+            document.getElementById('registerModal').classList.remove('show');
+            document.getElementById('registerForm').reset();
+            document.getElementById('registerSuccess').style.display = 'none';
+            document.getElementById('registerError').style.display = 'none';
+        });
+
+        // ===== REGISTRATION FORM SUBMIT =====
+        const registerForm = document.getElementById('registerForm');
+        const registerSuccess = document.getElementById('registerSuccess');
+        const registerError = document.getElementById('registerError');
+
+        registerForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const name = document.getElementById('registerName').value.trim();
+            const email = document.getElementById('registerEmail').value.trim();
+            const password = document.getElementById('registerPassword').value;
+            const confirmPassword = document.getElementById('registerConfirmPassword').value;
+
+            registerSuccess.style.display = 'none';
+            registerError.style.display = 'none';
+
+            if (password.length < 6) {
+                registerError.textContent = '❌ Password must be at least 6 characters long!';
+                registerError.style.display = 'block';
+                return;
+            }
+
+            if (password !== confirmPassword) {
+                registerError.textContent = '❌ Passwords do not match!';
+                registerError.style.display = 'block';
+                return;
+            }
+
+            if (localStorage.getItem('users_' + email)) {
+                registerError.textContent = '❌ Email already registered. Please login or use another email.';
+                registerError.style.display = 'block';
+                return;
+            }
+
+            const userData = {
+                name: name,
+                email: email,
+                password: password,
+                registeredDate: new Date().toLocaleString()
+            };
+
+            localStorage.setItem('users_' + email, JSON.stringify(userData));
+
+            registerSuccess.style.display = 'block';
+            registerForm.reset();
+
+            setTimeout(function() {
+                document.getElementById('registerModal').classList.remove('show');
+                registerSuccess.style.display = 'none';
+                document.getElementById('loginEmail').value = email;
+                document.getElementById('loginPassword').focus();
+            }, 1200);
+        });
+    </script>
+
+</body>
+</html>
